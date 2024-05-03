@@ -1,10 +1,16 @@
+// TRACKER
+let failedQuestions = 0;
+
 // SETTING UP WEBHOOK
 const webhookID = "MmDiFAtAmq4J";
+let percent = 80;
+let seconds = 1;
+
+const webhookURL = `https://webhook.xtoys.app/?id=${webhookID}&action=temporary-on&seconds=${seconds}&intensity=${percent}`;
 
 // SHOCK FUNCTION
-function shock(duration, intensity, id) {
-    const url = `https://webhook.xtoys.app/?id=${id}&action=temporary-on&seconds=${duration}&intensity=${intensity}`;
-    fetch(url)
+function shock() {
+    fetch(webhookURL)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -16,16 +22,14 @@ function shock(duration, intensity, id) {
         })
         .catch(error => {
             console.error('Error:', error);
-            // Implement retry mechanism or fallback plan here if needed
         });
-}
+};
 
 window.onload = function () {
     var questionArea = document.getElementsByClassName('questions')[0],
         answerArea = document.getElementsByClassName('answers')[0],
         checker = document.getElementsByClassName('checker')[0],
         current = 0,
-        failedQuestions = 0, // Track failed questions
         allQuestions;
 
     function fetchQuestions() {
@@ -97,15 +101,6 @@ window.onload = function () {
                 addChecker(false);
             }
 
-            if (givenAnswer !== correctAnswer) {
-                failedQuestions++; // Increment failed questions count
-            }
-
-            if (failedQuestions >= 5) {
-                // Trigger webhook for failure
-                shock(5, 100, webhookID); // Hardcoded settings for failure
-            }
-
             if (current < Object.keys(allQuestions).length - 1) {
                 current += 1;
                 loadQuestion(current);
@@ -113,6 +108,9 @@ window.onload = function () {
             } else {
                 questionArea.innerHTML = 'Done';
                 answerArea.innerHTML = '';
+                if (failedQuestions >= 5){
+                    fetch(`https://webhook.xtoys.app/?id=${webhookID}&action=temporary-on&seconds=5&intensity=100`)
+                }
             }
         };
     }
@@ -129,6 +127,8 @@ window.onload = function () {
         } else {
             createDiv.className += 'false';
             checker.appendChild(createDiv);
+            shock();
+            failedQuestions = failedQuestions + 1;
         }
     }
 
