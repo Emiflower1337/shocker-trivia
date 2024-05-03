@@ -2,8 +2,8 @@
 let failedQuestions = 0;
 
 // SETTING UP WEBHOOK
-const webhookID = "MmDiFAtAmq4J";
-let percent = 80;
+let webhookID = prompt("Please enter the webhook ID: ");
+let percent = 70;
 let seconds = 1;
 
 const webhookURL = `https://webhook.xtoys.app/?id=${webhookID}&action=temporary-on&seconds=${seconds}&intensity=${percent}`;
