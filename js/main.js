@@ -33,7 +33,7 @@ window.onload = function () {
         allQuestions;
 
     function fetchQuestions() {
-        fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple')
+        fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=medium&type=multiple')
             .then(response => response.json())
             .then(data => {
                 const apiQuestions = data.results;
